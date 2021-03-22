@@ -121,13 +121,22 @@ namespace spa_ftir_viewer
                 }
             }
 
+            if (fileNames.Count > 10)
+            {
+                fileNames.RemoveRange(10, fileNames.Count-10);
+            }
+
             // TODO: peak picking
             //List<float[]> peakPos = GetPeakPos(absVals);
 
             foreach (string fn in fileNames)
             {
-                spec = new Spectrum(fn);
-                spectra.Add(spec);
+                spectra.Add(new Spectrum(fn));
+            }
+
+            if (spectra.Count > 10)
+            {
+                spectra.RemoveRange(10, spectra.Count - 10);
             }
 
             fileNames.Clear();
