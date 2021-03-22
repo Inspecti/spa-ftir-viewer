@@ -18,14 +18,12 @@ namespace spa_ftir_viewer
         List<string> fileNames = new List<string>();
         string windowName = "FTIR spectra viewer";
         bool hasPath = false;
-        List<float[]> spectrumVals;
 
         Pen cursorLinePen = new Pen(Color.Red);
         float mouseXloc = 0;
         float mouseYloc = 0;
         bool dragging = false;
 
-        int spectranameXleft = 0;
         int selectedSpectrumInd = 0;
 
         public Spectrum spec = new Spectrum();
@@ -96,7 +94,6 @@ namespace spa_ftir_viewer
             if (!hasPath)
             {
                 OpenFile();
-                DrawSpectra();
             }
             else
             {
@@ -134,6 +131,8 @@ namespace spa_ftir_viewer
             }
 
             fileNames.Clear();
+            
+            DrawSpectra();
 
             return 1;
         }
@@ -149,16 +148,6 @@ namespace spa_ftir_viewer
             int axYmin = 100;
 
             List<Color> cols = new List<Color>();
-            //cols.Add(Color.FromArgb(255,   0,  61,  122)); // Dark blue
-            //cols.Add(Color.FromArgb(255,  43,  111, 214)); // Light blue
-            //cols.Add(Color.FromArgb(255,  12, 114, 117)); // Teal
-            //cols.Add(Color.FromArgb(255,   0, 100,  27)); // Dark green
-            //cols.Add(Color.FromArgb(255,  63,  65,   0)); // Olive
-            //cols.Add(Color.FromArgb(255, 160, 130,   0)); // Muted Yellow
-            //cols.Add(Color.FromArgb(255, 194,  70,   0)); // Orange
-            //cols.Add(Color.FromArgb(255, 188,  27,  27)); // Red
-            //cols.Add(Color.FromArgb(255, 189,  97, 194)); // Magenta
-            //cols.Add(Color.FromArgb(255, 69,  29, 158)); // Purple
 
             cols.Add(Color.FromArgb(255, 0, 61, 122)); // Dark blue
             cols.Add(Color.FromArgb(255, 188, 27, 27)); // Red
@@ -188,16 +177,12 @@ namespace spa_ftir_viewer
                 {
                     if (sp.binnedValues.Count == 0)
                     {
-                        Console.WriteLine("binned values were null, binning");
                         sp.binnedValues = sp.GetBinnedSpectrum(this.Width);
                     }
 
-                    spectrumVals = sp.binnedValues;
-                    Console.WriteLine(spectrumVals.Count);
-
-                    for (int i = 0; i < spectrumVals.Count; i++)
+                    foreach (float[] specVal in sp.binnedValues)
                     {
-                        s.Points.AddXY(spectrumVals[i][1], spectrumVals[i][0] + sp.tempYOffset + sp.yOffset);
+                        s.Points.AddXY(specVal[0], specVal[1] + sp.tempYOffset + sp.yOffset);
                     }
                 }
                 catch (Exception e)
@@ -210,8 +195,8 @@ namespace spa_ftir_viewer
                 s.Enabled = sp.visible;
                 specGraph.Series.Add(s);
 
-                if ((sp.absMax + (100-sp.absMax)) > axYmax) axYmax = sp.absMax + (100 - sp.absMax);
-                if ((sp.absMin + (100 - sp.absMax)) < axYmin) axYmin = sp.absMin + (100 - sp.absMax);
+                if ((sp.intensityMax + (100 - sp.intensityMax)) > axYmax) axYmax = sp.intensityMax + (100 - sp.intensityMax);
+                if ((sp.intensityMin + (100 - sp.intensityMax)) < axYmin) axYmin = sp.intensityMin + (100 - sp.intensityMax);
 
                 ToolStripMenuItem specItem = (ToolStripMenuItem)specMenu[n];
                 specItem.Text = sp.spaFile.fileName;
@@ -237,21 +222,21 @@ namespace spa_ftir_viewer
         {
             mouseXloc = e.Location.X;
             //mouseYloc = e.Location.Y;
-            float mouseChartLoc = 0;
+            float mouseChartXLocation = 0;
 
-            if (e.Location.X > 0 && e.Location.X < specGraph.Width) // TODO: should this be in its own function
+            if (e.Location.X > 0 && e.Location.X < specGraph.Width)
                 {
-                mouseChartLoc = (float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
-                Label_wavenumberLine.Text = ((int)mouseChartLoc).ToString() + " cm ⁻¹";
+                mouseChartXLocation = (float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
+                Label_wavenumberLine.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
                 Label_wavenumberLine.Left = (int)mouseXloc+5;
                 Label_waveNumberMouse.Text = "Wavenumber: " + Label_wavenumberLine.Text;
-                Label_absorbanceMouse.Text = "Absorbance:   " + Math.Round(spec.GetSingleAbsorbance(mouseChartLoc), 1).ToString() + " %"; // TODO: absorbance based on selected spectrum
+                //Label_intensityMouse.Text = "% Transmittance:   " + Math.Round(spec.GetSingleIntensity(mouseChartXLocation), 1).ToString() + " %"; // TODO: intensity based on selected spectrum and mode
             }
             else
             {
                 mouseXloc = -1;
                 Label_waveNumberMouse.Text = "Wavenumber: ";
-                Label_absorbanceMouse.Text = "Absorbance:   ";
+                //Label_intensityMouse.Text = "% Transmittance:   ";
                 Label_wavenumberLine.Text = "";
             }
 
@@ -297,8 +282,6 @@ namespace spa_ftir_viewer
             {
                 spectra[selectedSpectrumInd].yOffset += spectra[selectedSpectrumInd].tempYOffset;
                 spectra[selectedSpectrumInd].tempYOffset = 0;
-                Console.WriteLine(spectra[selectedSpectrumInd].yOffset);
-                Console.WriteLine(spectra[selectedSpectrumInd].tempYOffset);
             }
         }
 
@@ -308,16 +291,14 @@ namespace spa_ftir_viewer
 
             for (int i = 0; i < spectra.Count; i++)
             {
-                if (Math.Abs(mouseYAbs - (spectra[i].GetSingleAbsorbance((float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra[i].yOffset)) < 1) // TODO: instead of 1 needs to be some scaling fractor of Y axis
+                if (Math.Abs(mouseYAbs - (spectra[i].GetSingleIntensity((float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra[i].yOffset)) < 1) // TODO: instead of 1 needs to be some scaling fractor of Y axis
                 {
                     selectedSpectrumInd = i;
-                    Console.WriteLine("Selected spectrum " + i);
                     break;
                 }
                 else
                 {
                     selectedSpectrumInd = -1;
-                    Console.WriteLine("Did not select");
                 }
             }
         }
@@ -342,7 +323,7 @@ namespace spa_ftir_viewer
                 //Metafile bm = new Metafile(ms);
                 //Clipboard.SetImage(bm);
                 //Clipboard.SetImage(bm);
-                Console.WriteLine("copied");
+                Console.WriteLine("Copying does not work yet");
             }
         }
 
@@ -449,6 +430,15 @@ namespace spa_ftir_viewer
             UpdateSpectraToolStripMenuItemsStates();
         }
 
+        private void resetAllSpectraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (Spectrum sp in spectra)
+            {
+                 sp.ResetYOffset();
+            }
+            DrawSpectra();
+        }
+
         private void clearAllSpectraToolStripMenuItem_Click(object sender, EventArgs e)
         {
             spectra.Clear();
@@ -478,6 +468,9 @@ namespace spa_ftir_viewer
 
             yAx.IsReversed = true;
             yAx.IsLogarithmic = true; // A = -log(%T)
+
+            // TODO: set Y axis properly
+            // TODO: make spectrum drag work in absorbance mode
 
             DrawSpectra();
         }
@@ -520,5 +513,7 @@ namespace spa_ftir_viewer
             mouseXloc = -1;
             Label_wavenumberLine.Text = "";
         }
+
+
     }
 }

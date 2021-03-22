@@ -10,7 +10,6 @@ namespace spa_ftir_viewer
     public class SpaFile
     {
         public string filePath { get; set; }
-
         public string fileName { get; set; }
 
         public SpaFile()
@@ -33,23 +32,23 @@ namespace spa_ftir_viewer
         // Read spectrum from a spa-file, return list with {absorbance, wavenumber} -units
         public List<float[]> LoadSpectrum(String fn) 
         {
-            List<float> absList = new List<float>();
-            List<float[]> spec = new List<float[]>();
+            List<float> intensities = new List<float>();
+            List<float[]> spectrum = new List<float[]>();
 
-            int absStartOffset = 1852;
+            int intensityStartOffset = 1852;
             int maxWavenumOffset = 1600;
-            int totalNumValsOffset = 1588;
-            int totalNumVals = 7468; // TODO: check if spectrometer resolution is read correctly from offset 1588? 
+            int totalNumValsOffset = 1588; // TODO: check if changing spectrometer resolution changes this value?
+            int totalNumVals = 7468;  
             float maxWavenum = 0;
             float minWavenum = 0;
             float wavenumStep = 0;
 
-            // TOOD: error handling if file is not the right format?
+            // TOOD: error handling if file is not the right format
 
             if (File.Exists(fn))
             {
 
-                // Read total number of absorbance entries (array length) from offset 1588
+                // Read total number of intensity entries (list length) from offset 1588
                 using (BinaryReader reader = new BinaryReader(File.Open(fn, FileMode.Open)))
                 {
                     reader.ReadBytes(totalNumValsOffset);
@@ -66,31 +65,31 @@ namespace spa_ftir_viewer
                     reader.Close();
                 }
 
-                // Read individual absorbance values starting from offset 1852
+                // Read individual intensity values starting from offset 1852
                 using (BinaryReader reader = new BinaryReader(File.Open(fn, FileMode.Open)))
                 {
-                    reader.ReadBytes(absStartOffset);
+                    reader.ReadBytes(intensityStartOffset);
 
                     for (int i = 0; i < totalNumVals; i++)
                     {
-                        float absorbance = reader.ReadSingle();
-                        absList.Add(absorbance);
+                        float intensity = reader.ReadSingle();
+                        intensities.Add(intensity);
                     }
 
                     reader.Close();
                 }
 
-                wavenumStep = (maxWavenum - minWavenum) / absList.Count();
+                wavenumStep = (maxWavenum - minWavenum) / intensities.Count();
             }
 
-            foreach (float absorbance in absList)
+            foreach (float intensity in intensities)
             {
-                float[] vals = { absorbance, maxWavenum };
-                spec.Add(vals);
+                float[] vals = { maxWavenum, intensity };
+                spectrum.Add(vals);
                 maxWavenum = maxWavenum - wavenumStep;
             }
 
-            return spec;
+            return spectrum;
         }
 
         public override string ToString()

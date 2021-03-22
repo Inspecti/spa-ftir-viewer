@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace spa_ftir_viewer
 {
@@ -12,8 +9,8 @@ namespace spa_ftir_viewer
         public SpaFile spaFile { get; set; }
         public List<float[]> values { get; set; }
         public List<float[]> binnedValues { get; set; }
-        public int absMax { get; set; }
-        public int absMin { get; set; }
+        public int intensityMax { get; set; }
+        public int intensityMin { get; set; }
         public int count { get; set; }
         public bool visible { get; set; }
         public float tempYOffset { get; set; } // TODO: this is disgusting
@@ -24,8 +21,8 @@ namespace spa_ftir_viewer
             this.spaFile = null;
             this.values = null;
             this.binnedValues = new List<float[]>();
-            this.absMax = 0;
-            this.absMin = 100;
+            this.intensityMax = 0;
+            this.intensityMin = 100;
             this.count = 0;
             this.visible = true;
             this.tempYOffset = 0;
@@ -37,39 +34,39 @@ namespace spa_ftir_viewer
             this.spaFile = new SpaFile(filePath);
             this.values = spaFile.LoadSpectrum();
             this.binnedValues = new List<float[]>();
-            this.absMax = (int)GetAbsorbances().Max();
-            this.absMin = (int)GetAbsorbances().Min();
+            this.intensityMax = (int)GetIntensities().Max();
+            this.intensityMin = (int)GetIntensities().Min();
             this.count = values.Count;
             this.visible = true;
             this.tempYOffset = 0;
-            this.yOffset = 100-(int)GetAbsorbances().Max();
+            this.yOffset = 100-(int)GetIntensities().Max();
         }
 
         // SPECTRUM LOGIC
-        public float GetSingleAbsorbance(float wavenum)
+        public float GetSingleIntensity(float wavenum)
         {
             try
             {
                 foreach (float[] vals in values)
                 {
-                    if ((int)vals[1] == (int)wavenum)
+                    if ((int)vals[0] == (int)wavenum)
                     {
-                        return (float)vals[0];
+                        return (float)vals[1];
                     }
                 }
                 return 0;
             }
             catch (System.ArgumentOutOfRangeException e)
             {
-                return 0; // TODO: should return -1?
+                return 0;
             }
         }
 
-        private List<float> GetAbsorbances()
+        private List<float> GetIntensities()
         {
-            List<float> absVals = new List<float>();
-            foreach (float[] val in values) absVals.Add(val[0]);
-            return absVals;
+            List<float> intensities = new List<float>();
+            foreach (float[] val in values) intensities.Add(val[1]);
+            return intensities;
         }
 
         // Returns a spectrum that has been reduced to xWidth amount of bins, an easier spectrum to handle in GUI
@@ -81,41 +78,43 @@ namespace spa_ftir_viewer
             for (int i = 0; i+binSize < values.Count; i += binSize)
             {
                 float binnedWn = 0;
-                float binnedAbs = 0;
+                float binnedInt = 0;
 
                 for (int j = 0; j < binSize; j++)
                 {
-                    binnedAbs += values[i + j][0];
+                    binnedWn += values[i + j][0];
                 }
+                binnedWn /= binSize;
 
                 for (int j = 0; j < binSize; j++)
                 {
-                    binnedWn += values[i + j][1];
+                    binnedInt += values[i + j][1];
                 }
+                binnedInt /= binSize;
 
-                float[] binnedVal = { binnedAbs / binSize, binnedWn / binSize };
-                binnedSpectrum.Add(binnedVal);
+                binnedSpectrum.Add(new float[] { binnedWn, binnedInt });
             }
 
             return binnedSpectrum;
         }
 
+        // TODO: peak picking not done yet
         public List<float[]> GetPeaks()
         {
-            return GetPeaks(GetAbsorbances());
+            return GetPeaks(GetIntensities());
         }
 
-        public List<float[]> GetPeaks(List<float> absorbs)
+        public List<float[]> GetPeaks(List<float> intensities)
         {
             List<float[]> peakList = new List<float[]>();
             List<float> detected = new List<float>();
             float thresh = (float)0.3;
 
-            for (int i = 0; i + 1 < absorbs.Count(); i++)
+            for (int i = 0; i + 1 < intensities.Count(); i++)
             {
-                if (Math.Abs(absorbs[i + 1] - absorbs[i]) > thresh)
+                if (Math.Abs(intensities[i + 1] - intensities[i]) > thresh)
                 {
-                    detected.Add(absorbs[i + 1]);
+                    detected.Add(intensities[i + 1]);
                 }
 
                 if (detected.Count() > 10)
@@ -128,6 +127,11 @@ namespace spa_ftir_viewer
             return peakList;
         }
 
+        public void ResetYOffset()
+        {
+            this.yOffset = 100 - (int)GetIntensities().Max();
+        }
+
         // GENERAL UTILITIES
         public string GetFilename()
         {
@@ -136,7 +140,7 @@ namespace spa_ftir_viewer
 
         public override string ToString()
         {
-            return String.Join(",", this.GetAbsorbances().ToArray());
+            return String.Join(",", this.GetIntensities().ToArray());
         }
     }
 }

@@ -34,7 +34,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.specGraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.Label_waveNumberMouse = new System.Windows.Forms.Label();
-            this.Label_absorbanceMouse = new System.Windows.Forms.Label();
+            this.Label_intensityMouse = new System.Windows.Forms.Label();
             this.Label_wavenumberLine = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,6 +55,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showAllSpectraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideAllSpectraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetAllSpectraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearAllSpectraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.absorbanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +65,6 @@
             this.showGridlinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.specGraph)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -108,18 +109,18 @@
             this.Label_waveNumberMouse.TabIndex = 4;
             this.Label_waveNumberMouse.Text = "Wavenumber:";
             // 
-            // Label_absorbanceMouse
+            // Label_intensityMouse
             // 
-            this.Label_absorbanceMouse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.Label_absorbanceMouse.AutoSize = true;
-            this.Label_absorbanceMouse.BackColor = System.Drawing.Color.White;
-            this.Label_absorbanceMouse.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.Label_absorbanceMouse.ForeColor = System.Drawing.Color.Red;
-            this.Label_absorbanceMouse.Location = new System.Drawing.Point(21, 883);
-            this.Label_absorbanceMouse.Name = "Label_absorbanceMouse";
-            this.Label_absorbanceMouse.Size = new System.Drawing.Size(99, 20);
-            this.Label_absorbanceMouse.TabIndex = 5;
-            this.Label_absorbanceMouse.Text = "Absorbance:";
+            this.Label_intensityMouse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.Label_intensityMouse.AutoSize = true;
+            this.Label_intensityMouse.BackColor = System.Drawing.Color.White;
+            this.Label_intensityMouse.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.Label_intensityMouse.ForeColor = System.Drawing.Color.Red;
+            this.Label_intensityMouse.Location = new System.Drawing.Point(21, 883);
+            this.Label_intensityMouse.Name = "Label_intensityMouse";
+            this.Label_intensityMouse.Size = new System.Drawing.Size(73, 20);
+            this.Label_intensityMouse.TabIndex = 5;
+            this.Label_intensityMouse.Text = "Intensity:";
             // 
             // Label_wavenumberLine
             // 
@@ -194,6 +195,7 @@
             this.toolStripSeparator1,
             this.showAllSpectraToolStripMenuItem,
             this.hideAllSpectraToolStripMenuItem,
+            this.resetAllSpectraToolStripMenuItem,
             this.toolStripSeparator3,
             this.clearAllSpectraToolStripMenuItem});
             this.spectraToolStripMenuItem.Name = "spectraToolStripMenuItem";
@@ -299,6 +301,18 @@
             this.hideAllSpectraToolStripMenuItem.Text = "Hide all spectra";
             this.hideAllSpectraToolStripMenuItem.Click += new System.EventHandler(this.hideAllSpectraToolStripMenuItem_Click);
             // 
+            // resetAllSpectraToolStripMenuItem
+            // 
+            this.resetAllSpectraToolStripMenuItem.Name = "resetAllSpectraToolStripMenuItem";
+            this.resetAllSpectraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.resetAllSpectraToolStripMenuItem.Text = "Reset all spectra";
+            this.resetAllSpectraToolStripMenuItem.Click += new System.EventHandler(this.resetAllSpectraToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            // 
             // clearAllSpectraToolStripMenuItem
             // 
             this.clearAllSpectraToolStripMenuItem.Name = "clearAllSpectraToolStripMenuItem";
@@ -359,11 +373,6 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,7 +380,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1640, 919);
             this.Controls.Add(this.Label_wavenumberLine);
-            this.Controls.Add(this.Label_absorbanceMouse);
+            this.Controls.Add(this.Label_intensityMouse);
             this.Controls.Add(this.Label_waveNumberMouse);
             this.Controls.Add(this.specGraph);
             this.Controls.Add(this.menuStrip1);
@@ -395,7 +404,7 @@
         #endregion
         private System.Windows.Forms.DataVisualization.Charting.Chart specGraph;
         private System.Windows.Forms.Label Label_waveNumberMouse;
-        private System.Windows.Forms.Label Label_absorbanceMouse;
+        private System.Windows.Forms.Label Label_intensityMouse;
         private System.Windows.Forms.Label Label_wavenumberLine;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -425,6 +434,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem showGridlinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem resetAllSpectraToolStripMenuItem;
     }
 }
 
