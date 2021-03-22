@@ -1,5 +1,5 @@
 # spa-ftir-viewer
-Simple C# GUI application for viewing Thermo Scientific Nicolet FTIR spectrometer files (.spa). Currently tested on files for Nicolet Summit Pro, other spectra could need fiddling with file reading (SpaFile-class).
+Simple C# GUI application for viewing Thermo Scientific Nicolet FTIR spectrometer files (.spa). Currently tested on files for Nicolet Summit Pro, other spectra could need fiddling with file reading (SpaFile.cs).
 
 ## Usage
 Set up file association to open up .spa files with the program, or just run the executable. Open new spectrum from `File > Open...`, and clear current spectra with `Spectra > Clear all spectra`. Toggle specific spectra on and off from the `Spectra`-menu.
