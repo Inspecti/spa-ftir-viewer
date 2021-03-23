@@ -9,6 +9,7 @@ Compile solution with Visual Studio I guess.
 
 ## TODO:
 * Copying .emf file to clipboard for easy paste to Office apps
+* Read peak intensities based on single wn or range
 * Saving current view as a .png-file
 * Spectra names visible as legends
 * Additional information extract from .spa file
