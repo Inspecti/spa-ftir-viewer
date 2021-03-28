@@ -80,6 +80,7 @@ namespace spa_ftir_viewer
                 }
 
                 wavenumStep = (maxWavenum - minWavenum) / intensities.Count();
+
             }
 
             foreach (float intensity in intensities)
