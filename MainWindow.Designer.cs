@@ -36,7 +36,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyEmfToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.spectraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +72,8 @@
             this.intensityValueLabel = new System.Windows.Forms.Label();
             this.wavenumberValueLabel = new System.Windows.Forms.Label();
             this.selectedSpectrumName = new System.Windows.Forms.Label();
+            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyPngToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specGraph)).BeginInit();
             this.tableLayoutMain.SuspendLayout();
@@ -97,6 +99,7 @@
             this.fileToolStripMenuItem,
             this.spectraToolStripMenuItem,
             this.viewToolStripMenuItem,
+            this.functionsToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -108,7 +111,8 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openToolStripMenuItem,
-            this.copyToClipboardToolStripMenuItem,
+            this.copyEmfToClipboardToolStripMenuItem,
+            this.copyPngToClipboardToolStripMenuItem,
             this.saveImageAsToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
@@ -118,28 +122,28 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.openToolStripMenuItem.Text = "Open...";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
-            // copyToClipboardToolStripMenuItem
+            // copyEmfToClipboardToolStripMenuItem
             // 
-            this.copyToClipboardToolStripMenuItem.Name = "copyToClipboardToolStripMenuItem";
-            this.copyToClipboardToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-            this.copyToClipboardToolStripMenuItem.Text = "Copy to clipboard...";
-            this.copyToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyToClipboardToolStripMenuItem_Click);
+            this.copyEmfToClipboardToolStripMenuItem.Name = "copyEmfToClipboardToolStripMenuItem";
+            this.copyEmfToClipboardToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.copyEmfToClipboardToolStripMenuItem.Text = "Copy EMF to clipboard...";
+            this.copyEmfToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyEmfToClipboardToolStripMenuItem_Click);
             // 
             // saveImageAsToolStripMenuItem
             // 
             this.saveImageAsToolStripMenuItem.Name = "saveImageAsToolStripMenuItem";
-            this.saveImageAsToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.saveImageAsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.saveImageAsToolStripMenuItem.Text = "Save image as...";
             this.saveImageAsToolStripMenuItem.Click += new System.EventHandler(this.saveImageAsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -342,8 +346,9 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutToolStripMenuItem.Text = "About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // specGraph
             // 
@@ -414,7 +419,6 @@
             this.tableLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutMain.Size = new System.Drawing.Size(1640, 895);
             this.tableLayoutMain.TabIndex = 8;
-            this.tableLayoutMain.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // tableLayoutFooter
             // 
@@ -437,7 +441,6 @@
             this.tableLayoutFooter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutFooter.Size = new System.Drawing.Size(1634, 68);
             this.tableLayoutFooter.TabIndex = 3;
-            this.tableLayoutFooter.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
             // 
             // intensityValueLabel
             // 
@@ -478,6 +481,19 @@
             this.selectedSpectrumName.Text = "No spectrum selected";
             this.selectedSpectrumName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // functionsToolStripMenuItem
+            // 
+            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.functionsToolStripMenuItem.Text = "Functions";
+            // 
+            // copyPngToClipboardToolStripMenuItem
+            // 
+            this.copyPngToClipboardToolStripMenuItem.Name = "copyPngToClipboardToolStripMenuItem";
+            this.copyPngToClipboardToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.copyPngToClipboardToolStripMenuItem.Text = "Copy PNG to clipboard...";
+            this.copyPngToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyPngToClipboardToolStripMenuItem_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -493,7 +509,6 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
-            this.Load += new System.EventHandler(this.MainWindow_Load);
             this.Shown += new System.EventHandler(this.MainWindow_Shown);
             this.ResizeEnd += new System.EventHandler(this.MainWindow_ResizeEnd);
             this.Resize += new System.EventHandler(this.MainWindow_Resize);
@@ -516,7 +531,7 @@
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem copyToClipboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyEmfToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem spectraToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem spectrum1ToolStripMenuItem;
@@ -549,6 +564,8 @@
         private System.Windows.Forms.Label intensityValueLabel;
         private System.Windows.Forms.Label wavenumberValueLabel;
         private System.Windows.Forms.Label selectedSpectrumName;
+        private System.Windows.Forms.ToolStripMenuItem functionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyPngToClipboardToolStripMenuItem;
     }
 }
 

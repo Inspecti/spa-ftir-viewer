@@ -46,9 +46,6 @@ namespace spa_ftir_viewer
             InitializeComponent();
             specGraph.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
 
-            //specGraph.ChartAreas[0].CursorX.IsUserEnabled = true;
-            //specGraph.ChartAreas[0].CursorY.IsUserEnabled = true;
-
             // X-axis
             Axis xAx = specGraph.ChartAreas[0].AxisX;
             
@@ -84,8 +81,6 @@ namespace spa_ftir_viewer
             yAx.MinorGrid.Enabled = true;
             yAx.MinorGrid.LineColor = minorGridCol;
             yAx.MinorGrid.LineWidth = 1;
-
-            //spectranameXleft = Label_spectraName.Left;
 
             intensityTitleLabel.Text = "% Transmittance:";
 
@@ -318,18 +313,28 @@ namespace spa_ftir_viewer
             OpenFile();
         }
 
-        private void copyToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyEmfToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            copyEmfToClipboard();
+            copyToClipboard(ChartImageFormat.Emf);
         }
 
-        private void copyEmfToClipboard()
+        private void copyPngToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            copyToClipboard(ChartImageFormat.Png);
+        }
+
+        private bool copyToClipboard(ChartImageFormat chartImgFormat)
         {
             using (MemoryStream ms = new MemoryStream())
             {
-                MessageBox.Show("Not yet implemented", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //specGraph.SaveImage(ms, ChartImageFormat.Emf);
-                //Clipboard.SetImage(System.Drawing.Image.FromStream(ms));
+                if (chartImgFormat == ChartImageFormat.Emf)
+                {
+                    MessageBox.Show("Not yet implemented", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+                specGraph.SaveImage(ms, chartImgFormat);
+                Clipboard.SetImage(System.Drawing.Image.FromStream(ms));
+                return true;
             }
         }
 
@@ -486,7 +491,6 @@ namespace spa_ftir_viewer
             foreach (Spectrum sp in spectra)
             {
                 sp.ResetYOffset();
-                Console.WriteLine(offset);
                 sp.yOffset -= offset;
                 offset += (float)(specGraph.ChartAreas[0].AxisY.Maximum - specGraph.ChartAreas[0].AxisY.Minimum) / 30;
             }
@@ -506,6 +510,8 @@ namespace spa_ftir_viewer
         {
             spectra.Clear();
             selectedSpectrumIndex = -1;
+            selectedSpectrumName.Text = "";
+
             for (int i = 0;  i < 10; i++)
             {
                 ToolStripMenuItem specItem = null;
@@ -565,6 +571,12 @@ namespace spa_ftir_viewer
             specGraph.ChartAreas[0].AxisY.MinorGrid.Enabled = it.Checked;
         }
 
+        // HELP TOOLSTRIP MENU
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not yet implemented", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         // WINDOW BEHAVIOR
         private void MainWindow_ResizeEnd(object sender, EventArgs e)
         {
@@ -581,19 +593,6 @@ namespace spa_ftir_viewer
             wavenumberValueLine.Text = "";
         }
 
-        private void MainWindow_Load(object sender, EventArgs e)
-        {
 
-        }
-
-        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
