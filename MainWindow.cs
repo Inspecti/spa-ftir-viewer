@@ -230,7 +230,7 @@ namespace spa_ftir_viewer
                 mouseChartXLocation = (float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
             }
                 
-            if ( mouseChartXLocation > 400 && mouseChartXLocation < 4000)
+            if ( mouseChartXLocation > specGraph.ChartAreas[0].AxisX.Minimum && mouseChartXLocation < specGraph.ChartAreas[0].AxisX.Maximum)
             {
                 wavenumberValueLine.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
                 wavenumberValueLine.Left = (int)mouseXloc + 5;
