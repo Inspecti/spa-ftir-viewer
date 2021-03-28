@@ -9,12 +9,13 @@ namespace spa_ftir_viewer
         public SpaFile spaFile { get; set; }
         public List<float[]> values { get; set; }
         public List<float[]> binnedValues { get; set; }
-        public int intensityMax { get; set; }
-        public int intensityMin { get; set; }
-        public int count { get; set; }
+        public float intensityMax { get; set; }
+        public float intensityMin { get; set;  }
+        public int count { get; }
         public bool visible { get; set; }
         public float tempYOffset { get; set; } // TODO: this is disgusting
         public float yOffset { get; set; }
+        public bool isAbsorbance { get; set; }
 
         public Spectrum()
         {
@@ -27,6 +28,7 @@ namespace spa_ftir_viewer
             this.visible = true;
             this.tempYOffset = 0;
             this.yOffset = 0;
+            this.isAbsorbance = false;
         }
 
         public Spectrum(String filePath)
@@ -40,6 +42,7 @@ namespace spa_ftir_viewer
             this.visible = true;
             this.tempYOffset = 0;
             this.yOffset = 100-(int)GetIntensities().Max();
+            this.isAbsorbance = false;
         }
 
         // SPECTRUM LOGIC
@@ -67,6 +70,11 @@ namespace spa_ftir_viewer
             List<float> intensities = new List<float>();
             foreach (float[] val in values) intensities.Add(val[1]);
             return intensities;
+        }
+
+        public void BinSpectrum(int xWidth)
+        {
+            this.binnedValues = GetBinnedSpectrum(xWidth);
         }
 
         // Returns a spectrum that has been reduced to xWidth amount of bins, an easier spectrum to handle in GUI
@@ -128,7 +136,57 @@ namespace spa_ftir_viewer
 
         public void ResetYOffset()
         {
-            this.yOffset = 100 - (int)GetIntensities().Max();
+            if (!isAbsorbance)
+            {
+                this.yOffset = 100 - (int)GetIntensities().Max();
+            }
+            else
+            {
+                this.yOffset = 0; // TODO: absorbance yoffset
+            }
+        }
+
+        public List<float[]> TranslateSpectrumIntensityType()
+        {
+            this.binnedValues.Clear();
+            if (!isAbsorbance)
+            {
+                return TransToAbs();
+            }
+            return AbsToTrans();
+        }
+
+        // TODO: something is wrong with the calculation here
+        private List<float[]> TransToAbs()
+        {
+            List<float[]> translatedValues = new List<float[]>();
+
+            foreach (float[] vals in this.values)
+            {
+                // A = -log(%T)
+                float[] absValuePair = { vals[0], 2-(float)Math.Log10(vals[1]) };
+                translatedValues.Add(absValuePair);
+            }
+            this.values = translatedValues;
+            this.isAbsorbance = true;
+            this.intensityMax = (float)GetIntensities().Max();
+            this.intensityMin = (float)GetIntensities().Max();
+            return translatedValues;
+        }
+
+        private List<float[]> AbsToTrans()
+        {
+            List<float[]> translatedValues = new List<float[]>();
+
+            foreach (float[] vals in this.values)
+            {
+                // %T = -10^(A)
+                float[] transValuePair = { vals[0], (float)Math.Pow(10, vals[1]) };
+                translatedValues.Add(transValuePair);
+            }
+            this.values = translatedValues;
+            this.isAbsorbance = false;
+            return translatedValues;
         }
 
         // GENERAL UTILITIES
