@@ -222,23 +222,29 @@ namespace spa_ftir_viewer
         private void specGraph_MouseMove(object sender, MouseEventArgs e)
         {
             mouseXloc = e.Location.X;
-            //mouseYloc = e.Location.Y;
+            //mouseYloc = e.Location.Y
             float mouseChartXLocation = 0;
 
             if (e.Location.X > 0 && e.Location.X < specGraph.Width)
-                {
+            {
                 mouseChartXLocation = (float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
-                wavenumberValueLine.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
-                wavenumberValueLine.Left = (int)mouseXloc+5;
-                wavenumberValueLabel.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
+            }
                 
-                // intensityValueLabel.Text = Math.Round(spectra[selectedSpectrumIndex].GetSingleIntensity(mouseChartXLocation), 1).ToString() + " %"; TODO: dragging breaks this sometimes
+            if ( mouseChartXLocation > 400 && mouseChartXLocation < 4000)
+            {
+                wavenumberValueLine.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
+                wavenumberValueLine.Left = (int)mouseXloc + 5;
+                wavenumberValueLabel.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
+                if (selectedSpectrumIndex >= 0)
+                {
+                    intensityValueLabel.Text = Math.Round(spectra[selectedSpectrumIndex].GetSingleIntensity(mouseChartXLocation), 1).ToString() + " %"; // TODO: dragging breaks this sometimes
+                }
             }
             else
             {
                 mouseXloc = -1;
-                waveNumberTitleLabel.Text = "Wavenumber: ";
-                //Label_intensityMouse.Text = "% Transmittance:   ";
+                wavenumberValueLabel.Text = "";
+                intensityValueLabel.Text = "";
                 wavenumberValueLine.Text = "";
             }
 
@@ -259,7 +265,7 @@ namespace spa_ftir_viewer
 
         private void specGraph_Click(object sender, EventArgs e)
         {
-            float mouseYabs = (float)specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc);
+            float mouseYIntensity = (float)specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc);
         }
 
         private void specGraph_Paint(object sender, PaintEventArgs e)
