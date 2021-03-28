@@ -10,11 +10,10 @@ Compile solution with Visual Studio I guess.
 ## TODO:
 * Copying .emf file to clipboard for easy paste to Office apps
 * Read peak intensities based on single wn or range
-* Saving current view as a .png-file
 * Spectra names visible as legends
-* Additional information extract from .spa file
+* Additional information extracting from .spa file
 * Spectrum peak picking and overlay
-* Selecting mechanism by clicking
+* Selecting by clicking
 * Zooming and scaling spectrum
 * Propose chemical identity based on wavenumber
 
