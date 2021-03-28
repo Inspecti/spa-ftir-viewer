@@ -301,6 +301,8 @@ namespace spa_ftir_viewer
                 if (Math.Abs(mouseYAbs - (spectra[i].GetSingleIntensity((float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra[i].yOffset)) < 1) // TODO: instead of 1 needs to be some scaling fractor of Y axis
                 {
                     selectedSpectrumIndex = i;
+                    selectedSpectrumName.Text = spectra[selectedSpectrumIndex].GetFilename();
+                    selectedSpectrumName.ForeColor = colorPalette[selectedSpectrumIndex];
                     break;
                 }
                 else

@@ -94,7 +94,6 @@ namespace spa_ftir_viewer
 
                 binnedSpectrum.Add(new float[] { binnedWn, binnedInt });
             }
-
             return binnedSpectrum;
         }
 
@@ -135,7 +134,7 @@ namespace spa_ftir_viewer
         // GENERAL UTILITIES
         public string GetFilename()
         {
-            return spaFile.filePath;
+            return spaFile.fileName;
         }
 
         public override string ToString()

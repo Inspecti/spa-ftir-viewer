@@ -67,14 +67,15 @@
             this.specGraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.intensityTitleLabel = new System.Windows.Forms.Label();
             this.waveNumberTitleLabel = new System.Windows.Forms.Label();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutMain = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutFooter = new System.Windows.Forms.TableLayoutPanel();
             this.intensityValueLabel = new System.Windows.Forms.Label();
             this.wavenumberValueLabel = new System.Windows.Forms.Label();
+            this.selectedSpectrumName = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specGraph)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutMain.SuspendLayout();
+            this.tableLayoutFooter.SuspendLayout();
             this.SuspendLayout();
             // 
             // wavenumberValueLine
@@ -360,7 +361,7 @@
             series1.Legend = "Legend1";
             series1.Name = "Series1";
             this.specGraph.Series.Add(series1);
-            this.specGraph.Size = new System.Drawing.Size(1640, 821);
+            this.specGraph.Size = new System.Drawing.Size(1640, 801);
             this.specGraph.TabIndex = 2;
             this.specGraph.Text = "chart1";
             this.specGraph.TextAntiAliasingQuality = System.Windows.Forms.DataVisualization.Charting.TextAntiAliasingQuality.Normal;
@@ -377,9 +378,9 @@
             this.intensityTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.intensityTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.intensityTitleLabel.ForeColor = System.Drawing.Color.Red;
-            this.intensityTitleLabel.Location = new System.Drawing.Point(13, 0);
+            this.intensityTitleLabel.Location = new System.Drawing.Point(33, 0);
             this.intensityTitleLabel.Name = "intensityTitleLabel";
-            this.intensityTitleLabel.Size = new System.Drawing.Size(131, 24);
+            this.intensityTitleLabel.Size = new System.Drawing.Size(107, 24);
             this.intensityTitleLabel.TabIndex = 5;
             this.intensityTitleLabel.Text = "Intensity:";
             this.intensityTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -391,47 +392,52 @@
             this.waveNumberTitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.waveNumberTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.waveNumberTitleLabel.ForeColor = System.Drawing.Color.Red;
-            this.waveNumberTitleLabel.Location = new System.Drawing.Point(13, 24);
+            this.waveNumberTitleLabel.Location = new System.Drawing.Point(33, 24);
             this.waveNumberTitleLabel.Name = "waveNumberTitleLabel";
-            this.waveNumberTitleLabel.Size = new System.Drawing.Size(131, 24);
+            this.waveNumberTitleLabel.Size = new System.Drawing.Size(107, 24);
             this.waveNumberTitleLabel.TabIndex = 4;
             this.waveNumberTitleLabel.Text = "Wavenumber:";
             this.waveNumberTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // tableLayoutPanel1
+            // tableLayoutMain
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.specGraph, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1640, 895);
-            this.tableLayoutPanel1.TabIndex = 8;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
+            this.tableLayoutMain.ColumnCount = 1;
+            this.tableLayoutMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutMain.Controls.Add(this.tableLayoutFooter, 0, 1);
+            this.tableLayoutMain.Controls.Add(this.specGraph, 0, 0);
+            this.tableLayoutMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutMain.Location = new System.Drawing.Point(0, 24);
+            this.tableLayoutMain.Name = "tableLayoutMain";
+            this.tableLayoutMain.RowCount = 3;
+            this.tableLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 74F));
+            this.tableLayoutMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutMain.Size = new System.Drawing.Size(1640, 895);
+            this.tableLayoutMain.TabIndex = 8;
+            this.tableLayoutMain.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
-            // tableLayoutPanel2
+            // tableLayoutFooter
             // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.33129F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 57.66871F));
-            this.tableLayoutPanel2.Controls.Add(this.intensityTitleLabel, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.waveNumberTitleLabel, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.intensityValueLabel, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.wavenumberValueLabel, 1, 1);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 824);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(10, 0, 0, 20);
-            this.tableLayoutPanel2.RowCount = 2;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(336, 68);
-            this.tableLayoutPanel2.TabIndex = 3;
-            this.tableLayoutPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
+            this.tableLayoutFooter.ColumnCount = 3;
+            this.tableLayoutFooter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutFooter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutFooter.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutFooter.Controls.Add(this.selectedSpectrumName, 2, 0);
+            this.tableLayoutFooter.Controls.Add(this.intensityTitleLabel, 0, 0);
+            this.tableLayoutFooter.Controls.Add(this.waveNumberTitleLabel, 0, 1);
+            this.tableLayoutFooter.Controls.Add(this.intensityValueLabel, 1, 0);
+            this.tableLayoutFooter.Controls.Add(this.wavenumberValueLabel, 1, 1);
+            this.tableLayoutFooter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutFooter.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.tableLayoutFooter.Location = new System.Drawing.Point(3, 804);
+            this.tableLayoutFooter.Name = "tableLayoutFooter";
+            this.tableLayoutFooter.Padding = new System.Windows.Forms.Padding(30, 0, 100, 20);
+            this.tableLayoutFooter.RowCount = 2;
+            this.tableLayoutFooter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutFooter.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutFooter.Size = new System.Drawing.Size(1634, 68);
+            this.tableLayoutFooter.TabIndex = 3;
+            this.tableLayoutFooter.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
             // 
             // intensityValueLabel
             // 
@@ -439,9 +445,9 @@
             this.intensityValueLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.intensityValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.intensityValueLabel.ForeColor = System.Drawing.Color.Red;
-            this.intensityValueLabel.Location = new System.Drawing.Point(150, 0);
+            this.intensityValueLabel.Location = new System.Drawing.Point(146, 0);
             this.intensityValueLabel.Name = "intensityValueLabel";
-            this.intensityValueLabel.Size = new System.Drawing.Size(183, 24);
+            this.intensityValueLabel.Size = new System.Drawing.Size(32, 24);
             this.intensityValueLabel.TabIndex = 6;
             this.intensityValueLabel.Text = "0%";
             this.intensityValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -452,12 +458,25 @@
             this.wavenumberValueLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wavenumberValueLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.wavenumberValueLabel.ForeColor = System.Drawing.Color.Red;
-            this.wavenumberValueLabel.Location = new System.Drawing.Point(150, 24);
+            this.wavenumberValueLabel.Location = new System.Drawing.Point(146, 24);
             this.wavenumberValueLabel.Name = "wavenumberValueLabel";
-            this.wavenumberValueLabel.Size = new System.Drawing.Size(183, 24);
+            this.wavenumberValueLabel.Size = new System.Drawing.Size(32, 24);
             this.wavenumberValueLabel.TabIndex = 7;
             this.wavenumberValueLabel.Text = "0";
             this.wavenumberValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // selectedSpectrumName
+            // 
+            this.selectedSpectrumName.AutoSize = true;
+            this.selectedSpectrumName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.selectedSpectrumName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.selectedSpectrumName.ForeColor = System.Drawing.Color.Black;
+            this.selectedSpectrumName.Location = new System.Drawing.Point(184, 0);
+            this.selectedSpectrumName.Name = "selectedSpectrumName";
+            this.selectedSpectrumName.Size = new System.Drawing.Size(1347, 24);
+            this.selectedSpectrumName.TabIndex = 7;
+            this.selectedSpectrumName.Text = "No spectrum selected";
+            this.selectedSpectrumName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainWindow
             // 
@@ -466,7 +485,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1640, 919);
             this.Controls.Add(this.wavenumberValueLine);
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.tableLayoutMain);
             this.Controls.Add(this.menuStrip1);
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -481,9 +500,9 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specGraph)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
+            this.tableLayoutMain.ResumeLayout(false);
+            this.tableLayoutFooter.ResumeLayout(false);
+            this.tableLayoutFooter.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -525,10 +544,11 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart specGraph;
         private System.Windows.Forms.Label intensityTitleLabel;
         private System.Windows.Forms.Label waveNumberTitleLabel;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutMain;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutFooter;
         private System.Windows.Forms.Label intensityValueLabel;
         private System.Windows.Forms.Label wavenumberValueLabel;
+        private System.Windows.Forms.Label selectedSpectrumName;
     }
 }
 
