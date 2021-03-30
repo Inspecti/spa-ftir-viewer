@@ -19,14 +19,12 @@ namespace spa_ftir_viewer
         List<string> filenames = new List<string>();
 
         Pen cursorLinePen = new Pen(Color.Red);
-        float mouseXloc = 0;
-        float mouseYloc = 0;
+        double mouseXloc = 0;
+        double mouseYloc = 0;
         bool dragging = false;
         bool absorbanceMode = false;
 
         int selectedSpectrumIndex = 0;
-
-        //public List<Spectrum> spectra = new List<Spectrum>();
         public Spectra spectra = new Spectra();
 
         ToolStripItemCollection specMenu = null;
@@ -129,9 +127,8 @@ namespace spa_ftir_viewer
                 }
             }
 
-            if (filenames.Count > 10) filenames.RemoveRange(10, filenames.Count-10);
+            if (filenames.Count > 10) filenames.RemoveRange(10, filenames.Count - 10);
 
-            //spectra.LoadFromFilenames(filenames);
             spectra = new Spectra(filenames);
             spectra.ResetYOffsets();
 
@@ -152,8 +149,8 @@ namespace spa_ftir_viewer
 
         private int DrawSpectra(Spectra spectra)
         {
-            float axYmax = 0;
-            float axYmin = 100;
+            double axYmax = 0;
+            double axYmin = 100;
 
             specGraph.Series.Clear();
 
@@ -178,7 +175,7 @@ namespace spa_ftir_viewer
                         sp.BinSpectrum(this.Width);
                     }
 
-                    foreach (float[] binnedValuePair in sp.binnedValues)
+                    foreach (double[] binnedValuePair in sp.binnedValues)
                     {
                         s.Points.AddXY(binnedValuePair[0], binnedValuePair[1] + sp.tempYOffset + sp.yOffset);
                     }
@@ -196,14 +193,6 @@ namespace spa_ftir_viewer
                 AppendToSpectraToolStripMenu(sp, i);
             }
 
-            SetGraphYScale();
-
-            //specGraph.ChartAreas[0].AxisY.Maximum = axYmax + 2;
-            //specGraph.ChartAreas[0].AxisY.Minimum = axYmin - 2;
-
-            //specGraph.ChartAreas[0].AxisY.Interval = 10;
-            //specGraph.ChartAreas[0].AxisY.IntervalOffset = -(axYmin - 2) % 10;
-
             specGraph.Refresh();
             return 1;
         }
@@ -215,17 +204,11 @@ namespace spa_ftir_viewer
                 specGraph.ChartAreas[0].AxisY.Maximum = spectra.MaximumWithOffsets();
                 specGraph.ChartAreas[0].AxisY.Minimum = spectra.MinimumWithOffsets();
 
-                Console.WriteLine(spectra.MaximumWithOffsets());
-                Console.WriteLine(spectra.MinimumWithOffsets());
-
-                //specGraph.ChartAreas[0].AxisY.Interval = 0.1;
-                //specGraph.ChartAreas[0].AxisY.IntervalOffset = -(spectra.MinimumWithOffsets() - 2) % 10;
+                specGraph.ChartAreas[0].AxisY.Interval = 0.1;
+                specGraph.ChartAreas[0].AxisY.IntervalOffset = -(spectra.MinimumWithOffsets() % 0.1);
             }
             else 
             {
-                //if ((sp.intensityMax + (100 - sp.intensityMax)) > axYmax) axYmax = (float)(sp.intensityMax + (100.0 - sp.intensityMax));
-                //if ((sp.intensityMin + (100 - sp.intensityMax)) < axYmin) axYmin = (float)(sp.intensityMin + (100.0 - sp.intensityMax));
-
                 specGraph.ChartAreas[0].AxisY.Maximum = spectra.MaximumWithOffsets() + 2;
                 specGraph.ChartAreas[0].AxisY.Minimum = spectra.MinimumWithOffsets() - 2;
 
@@ -249,11 +232,11 @@ namespace spa_ftir_viewer
         {
             mouseXloc = e.Location.X;
             //mouseYloc = e.Location.Y
-            float mouseChartXLocation = 0;
+            double mouseChartXLocation = 0;
 
             if (e.Location.X > 0 && e.Location.X < specGraph.Width)
             {
-                mouseChartXLocation = (float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
+                mouseChartXLocation = specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
             }
                 
             if ( mouseChartXLocation > specGraph.ChartAreas[0].AxisX.Minimum && mouseChartXLocation < specGraph.ChartAreas[0].AxisX.Maximum)
@@ -282,7 +265,7 @@ namespace spa_ftir_viewer
                 {
                     if (selectedSpectrumIndex >= 0)
                     {
-                        spectra.GetSpectrum(selectedSpectrumIndex).tempYOffset = ((float)(specGraph.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc)));
+                        spectra.GetSpectrum(selectedSpectrumIndex).tempYOffset = ((specGraph.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc)));
                     }
                     DrawSpectra();
                 }
@@ -291,21 +274,21 @@ namespace spa_ftir_viewer
 
         private void specGraph_Click(object sender, EventArgs e)
         {
-            float mouseYIntensity = (float)specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc);
+            double mouseYIntensity = specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc);
         }
 
         private void specGraph_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawLine(cursorLinePen, 
-                                mouseXloc, (float)specGraph.ChartAreas[0].AxisY.ValueToPixelPosition(specGraph.ChartAreas[0].AxisY.Maximum), 
-                                mouseXloc, (float)specGraph.ChartAreas[0].AxisY.ValueToPixelPosition(specGraph.ChartAreas[0].AxisY.Minimum));
+                                (float)mouseXloc, (float)specGraph.ChartAreas[0].AxisY.ValueToPixelPosition(specGraph.ChartAreas[0].AxisY.Maximum), 
+                                (float)mouseXloc, (float)specGraph.ChartAreas[0].AxisY.ValueToPixelPosition(specGraph.ChartAreas[0].AxisY.Minimum));
         }
 
         private void specGraph_MouseDown(object sender, MouseEventArgs e)
         {
             mouseXloc = e.Location.X;
             mouseYloc = e.Location.Y;
-            SelectClickedSpectrum((float)specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc));
+            SelectClickedSpectrum(specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc));
             dragging = true;
         }
 
@@ -319,13 +302,13 @@ namespace spa_ftir_viewer
             }
         }
 
-        private void SelectClickedSpectrum(float mouseYAbs)
+        private void SelectClickedSpectrum(double mouseYIntensity)
         {
             // specGrabDistance = (specGraph.ChartAreas[0].Height / specGraph.ChartAreas[0].AxisY.Maximum)
 
             for (int i = 0; i < spectra.Count(); i++)
             {
-                if (Math.Abs(mouseYAbs - (spectra.GetSpectrum(i).GetSingleIntensity((float)specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset)) < 1) // TODO: instead of 1 needs to be some scaling fractor of Y axis
+                if (Math.Abs(mouseYIntensity - (spectra.GetSpectrum(i).GetSingleIntensity(specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset)) < (spectra.intensityMaxAll - spectra.intensityMinAll)/100) // TODO: instead of 1 needs to be some scaling fractor of Y axis
                 {
                     selectedSpectrumIndex = i;
                     selectedSpectrumName.Text = spectra.GetSpectrum(selectedSpectrumIndex).GetFilename();
@@ -505,7 +488,7 @@ namespace spa_ftir_viewer
 
         private void stackAllSpectraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            float offset = (float)(specGraph.ChartAreas[0].AxisY.Maximum - specGraph.ChartAreas[0].AxisY.Minimum) / 30;
+            double offset = (specGraph.ChartAreas[0].AxisY.Maximum - specGraph.ChartAreas[0].AxisY.Minimum) / 30;
             spectra.StackAllSpectra(offset);
             DrawSpectra();
             SetGraphYScale();
@@ -544,13 +527,7 @@ namespace spa_ftir_viewer
 
         // VIEW TOOLSTRIP MENU
         private void absorbanceToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Axis yAx = specGraph.ChartAreas[0].AxisY;
-            //yAx.IsLogarithmic = false;
-            yAx.Interval = 0.1;
-            yAx.Minimum = 0;
-            yAx.Maximum = 0.01;
-
+        {            
             spectra.ToAbsorbance();
             spectra.ResetYOffsets();
 
@@ -563,11 +540,6 @@ namespace spa_ftir_viewer
 
         private void transmittanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Axis yAx = specGraph.ChartAreas[0].AxisY;
-
-            //yAx.IsReversed = false;
-            //yAx.IsLogarithmic = false;
-
             spectra.ToTransmittance();
             spectra.ResetYOffsets();
 
@@ -602,7 +574,6 @@ namespace spa_ftir_viewer
         {
             spectra.ClearBinnedValues();
             DrawSpectra();
-            SetGraphYScale();
         }
 
         private void MainWindow_Resize(object sender, EventArgs e)

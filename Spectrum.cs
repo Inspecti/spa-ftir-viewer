@@ -7,21 +7,21 @@ namespace spa_ftir_viewer
     public class Spectrum
     {
         public SpaFile spaFile { get; set; }
-        public List<float[]> values { get; set; }
-        public List<float[]> binnedValues { get; set; }
-        public float intensityMax { get; set; }
-        public float intensityMin { get; set;  }
+        public List<double[]> values { get; set; }
+        public List<double[]> binnedValues { get; set; }
+        public double intensityMax { get; set; }
+        public double intensityMin { get; set;  }
         public int count { get; }
         public bool visible { get; set; }
-        public float tempYOffset { get; set; } // TODO: this is disgusting
-        public float yOffset { get; set; }
+        public double tempYOffset { get; set; } // TODO: this is disgusting
+        public double yOffset { get; set; }
         public bool isAbsorbance { get; set; }
 
         public Spectrum()
         {
             this.spaFile = null;
             this.values = null;
-            this.binnedValues = new List<float[]>();
+            this.binnedValues = new List<double[]>();
             this.intensityMax = 0;
             this.intensityMin = 100;
             this.count = 0;
@@ -35,7 +35,7 @@ namespace spa_ftir_viewer
         {
             this.spaFile = new SpaFile(filePath);
             this.values = spaFile.LoadSpectrum();
-            this.binnedValues = new List<float[]>();
+            this.binnedValues = new List<double[]>();
             this.intensityMax = (int)GetIntensities().Max();
             this.intensityMin = (int)GetIntensities().Min();
             this.count = values.Count;
@@ -46,15 +46,15 @@ namespace spa_ftir_viewer
         }
 
         // SPECTRUM LOGIC
-        public float GetSingleIntensity(float wavenum)
+        public double GetSingleIntensity(double wavenum)
         {
             try
             {
-                foreach (float[] vals in values)
+                foreach (double[] vals in values)
                 {
                     if ((int)vals[0] == (int)wavenum)
                     {
-                        return (float)vals[1];
+                        return vals[1];
                     }
                 }
                 return 0;
@@ -65,10 +65,10 @@ namespace spa_ftir_viewer
             }
         }
 
-        private List<float> GetIntensities()
+        private List<double> GetIntensities()
         {
-            List<float> intensities = new List<float>();
-            foreach (float[] val in values) intensities.Add(val[1]);
+            List<double> intensities = new List<double>();
+            foreach (double[] val in values) intensities.Add(val[1]);
             return intensities;
         }
 
@@ -78,15 +78,15 @@ namespace spa_ftir_viewer
         }
 
         // Returns a spectrum that has been reduced to xWidth amount of bins, an easier spectrum to handle in GUI
-        public List<float[]> GetBinnedSpectrum(int xWidth)
+        public List<double[]> GetBinnedSpectrum(int xWidth)
         {
-            List<float[]> binnedSpectrum = new List<float[]>();
-            int binSize = (int) Math.Ceiling((float) values.Count / (float) xWidth);
+            List<double[]> binnedSpectrum = new List<double[]>();
+            int binSize = (int) Math.Ceiling((double) values.Count / xWidth);
 
             for (int i = 0; i+binSize < values.Count; i += binSize)
             {
-                float binnedWn = 0;
-                float binnedInt = 0;
+                double binnedWn = 0;
+                double binnedInt = 0;
 
                 for (int j = 0; j < binSize; j++)
                 {
@@ -100,22 +100,22 @@ namespace spa_ftir_viewer
                 }
                 binnedInt /= binSize;
 
-                binnedSpectrum.Add(new float[] { binnedWn, binnedInt });
+                binnedSpectrum.Add(new double[] { binnedWn, binnedInt });
             }
             return binnedSpectrum;
         }
 
         // TODO: peak picking not done yet
-        public List<float[]> GetPeaks()
+        public List<double[]> GetPeaks()
         {
             return GetPeaks(GetIntensities());
         }
 
-        public List<float[]> GetPeaks(List<float> intensities)
+        public List<double[]> GetPeaks(List<double> intensities)
         {
-            List<float[]> peakList = new List<float[]>();
-            List<float> detected = new List<float>();
-            float thresh = (float)0.3;
+            List<double[]> peakList = new List<double[]>();
+            List<double> detected = new List<double>();
+            double thresh = 0.3;
 
             for (int i = 0; i + 1 < intensities.Count(); i++)
             {
@@ -126,7 +126,7 @@ namespace spa_ftir_viewer
 
                 if (detected.Count() > 10)
                 {
-                    peakList.Add(new float[] { i - 10 + detected.IndexOf(detected.Min()), detected.Min() });
+                    peakList.Add(new double[] { i - 10 + detected.IndexOf(detected.Min()), detected.Min() });
                     detected.Clear();
                 }
             }
@@ -146,7 +146,7 @@ namespace spa_ftir_viewer
             }
         }
 
-        public List<float[]> TranslateSpectrumIntensityType()
+        public List<double[]> TranslateSpectrumIntensityType()
         {
             this.binnedValues.Clear();
             if (!isAbsorbance)
@@ -157,35 +157,37 @@ namespace spa_ftir_viewer
         }
 
         // TODO: something is wrong with the calculation here
-        private List<float[]> TransToAbs()
+        private List<double[]> TransToAbs()
         {
-            List<float[]> translatedValues = new List<float[]>();
+            List<double[]> translatedValues = new List<double[]>();
 
-            foreach (float[] vals in this.values)
+            foreach (double[] vals in this.values)
             {
                 // A = -log(%T)
-                float[] absValuePair = { vals[0], 2-(float)Math.Log10(vals[1]) };
+                double[] absValuePair = { vals[0], 2-Math.Log10(vals[1]) };
                 translatedValues.Add(absValuePair);
             }
             this.values = translatedValues;
             this.isAbsorbance = true;
-            this.intensityMax = (float)GetIntensities().Max();
-            this.intensityMin = (float)GetIntensities().Max();
+            this.intensityMax = GetIntensities().Max();
+            this.intensityMin = GetIntensities().Min();
             return translatedValues;
         }
 
-        private List<float[]> AbsToTrans()
+        private List<double[]> AbsToTrans()
         {
-            List<float[]> translatedValues = new List<float[]>();
+            List<double[]> translatedValues = new List<double[]>();
 
-            foreach (float[] vals in this.values)
+            foreach (double[] vals in this.values)
             {
                 // %T = -10^(A)
-                float[] transValuePair = { vals[0], (float)Math.Pow(10, vals[1]) };
+                double[] transValuePair = { vals[0], Math.Pow(10, -vals[1]+2) };
                 translatedValues.Add(transValuePair);
             }
             this.values = translatedValues;
             this.isAbsorbance = false;
+            this.intensityMax = GetIntensities().Max();
+            this.intensityMin = GetIntensities().Min();
             return translatedValues;
         }
 

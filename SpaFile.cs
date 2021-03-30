@@ -24,16 +24,16 @@ namespace spa_ftir_viewer
             fileName = (string)System.IO.Path.GetFileName(spaPath);
         }
 
-        public List<float[]> LoadSpectrum()
+        public List<double[]> LoadSpectrum()
         {
             return LoadSpectrum(filePath);
         }
 
         // Read spectrum from a spa-file, return list with {absorbance, wavenumber} -units
-        public List<float[]> LoadSpectrum(String fn) 
+        public List<double[]> LoadSpectrum(String fn) 
         {
-            List<float> intensities = new List<float>();
-            List<float[]> spectrum = new List<float[]>();
+            List<double> intensities = new List<double>();
+            List<double[]> spectrum = new List<double[]>();
 
             int intensityStartOffset = 1852;
             int maxWavenumOffset = 1600;
@@ -72,7 +72,7 @@ namespace spa_ftir_viewer
 
                     for (int i = 0; i < totalNumVals; i++)
                     {
-                        float intensity = reader.ReadSingle();
+                        double intensity = (double) reader.ReadSingle();
                         intensities.Add(intensity);
                     }
 
@@ -83,9 +83,9 @@ namespace spa_ftir_viewer
 
             }
 
-            foreach (float intensity in intensities)
+            foreach (double intensity in intensities)
             {
-                float[] vals = { maxWavenum, intensity };
+                double[] vals = { maxWavenum, intensity };
                 spectrum.Add(vals);
                 maxWavenum = maxWavenum - wavenumStep;
             }

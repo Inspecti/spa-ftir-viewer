@@ -9,8 +9,8 @@ namespace spa_ftir_viewer
     public class Spectra
     {
         public List<Spectrum> spectrumList { get; set; }
-        public float intensityMinAll { get; set; }
-        public float intensityMaxAll { get; set; }
+        public double intensityMinAll { get; set; }
+        public double intensityMaxAll { get; set; }
         public bool areAbsorbance { get; set; }
 
         public Spectra()
@@ -46,9 +46,9 @@ namespace spa_ftir_viewer
             return spectrumList[index];
         }
 
-        private float Minimum()
+        private double Minimum()
         {
-            float min = spectrumList[0].intensityMin;
+            double min = spectrumList[0].intensityMin;
             foreach (Spectrum sp in spectrumList)
             {
                 if (min > sp.intensityMin) min = sp.intensityMin;
@@ -56,9 +56,9 @@ namespace spa_ftir_viewer
             return min;
         }
 
-        private float Maximum()
+        private double Maximum()
         {
-            float max = spectrumList[0].intensityMax;
+            double max = spectrumList[0].intensityMax;
             foreach (Spectrum sp in spectrumList)
             {
                 if (max < sp.intensityMax) max = sp.intensityMax;
@@ -66,10 +66,10 @@ namespace spa_ftir_viewer
             return max;
         }
 
-        public float MinimumWithOffsets()
+        public double MinimumWithOffsets()
         {
             if (!spectrumList.Any()) return 0;
-            float min = spectrumList[0].intensityMin + spectrumList[0].yOffset;
+            double min = spectrumList[0].intensityMin + spectrumList[0].yOffset;
             foreach (Spectrum sp in spectrumList)
             {
                 if (min > sp.intensityMin + sp.yOffset) min = sp.intensityMin + sp.yOffset;
@@ -77,10 +77,10 @@ namespace spa_ftir_viewer
             return min;
         }
 
-        public float MaximumWithOffsets()
+        public double MaximumWithOffsets()
         {
             if (!spectrumList.Any()) return 0;
-            float max = spectrumList[0].intensityMax + spectrumList[0].yOffset;
+            double max = spectrumList[0].intensityMax + spectrumList[0].yOffset;
             foreach (Spectrum sp in spectrumList)
             {
                 if (max < sp.intensityMax + sp.yOffset) max = sp.intensityMax + sp.yOffset;
@@ -94,6 +94,8 @@ namespace spa_ftir_viewer
             {
                 if (!sp.isAbsorbance) sp.TranslateSpectrumIntensityType();
             }
+            this.intensityMinAll = Minimum();
+            this.intensityMaxAll = Maximum();
         }
 
         public void ToTransmittance()
@@ -102,6 +104,8 @@ namespace spa_ftir_viewer
             {
                 if (sp.isAbsorbance) sp.TranslateSpectrumIntensityType();
             }
+            this.intensityMinAll = Minimum();
+            this.intensityMaxAll = Maximum();
         }
 
         public void ClearBinnedValues()
@@ -120,10 +124,10 @@ namespace spa_ftir_viewer
             }
         }
 
-        public void StackAllSpectra(float offset)
+        public void StackAllSpectra(double offset)
         {
             ResetYOffsets();
-            float singleoffset = 0;
+            double singleoffset = 0;
             foreach (Spectrum sp in spectrumList)
             {
                 sp.yOffset -= singleoffset;
@@ -136,6 +140,7 @@ namespace spa_ftir_viewer
             foreach (Spectrum sp in spectrumList)
             {
                 sp.visible = true;
+                Console.WriteLine(sp);
             }
         }
 

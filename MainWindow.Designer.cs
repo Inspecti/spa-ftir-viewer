@@ -37,6 +37,7 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyEmfToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyPngToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveImageAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.spectraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +63,7 @@
             this.transmittanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.showGridlinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specGraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -69,11 +71,9 @@
             this.waveNumberTitleLabel = new System.Windows.Forms.Label();
             this.tableLayoutMain = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutFooter = new System.Windows.Forms.TableLayoutPanel();
+            this.selectedSpectrumName = new System.Windows.Forms.Label();
             this.intensityValueLabel = new System.Windows.Forms.Label();
             this.wavenumberValueLabel = new System.Windows.Forms.Label();
-            this.selectedSpectrumName = new System.Windows.Forms.Label();
-            this.functionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyPngToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.specGraph)).BeginInit();
             this.tableLayoutMain.SuspendLayout();
@@ -132,6 +132,13 @@
             this.copyEmfToClipboardToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
             this.copyEmfToClipboardToolStripMenuItem.Text = "Copy EMF to clipboard...";
             this.copyEmfToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyEmfToClipboardToolStripMenuItem_Click);
+            // 
+            // copyPngToClipboardToolStripMenuItem
+            // 
+            this.copyPngToClipboardToolStripMenuItem.Name = "copyPngToClipboardToolStripMenuItem";
+            this.copyPngToClipboardToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.copyPngToClipboardToolStripMenuItem.Text = "Copy PNG to clipboard...";
+            this.copyPngToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyPngToClipboardToolStripMenuItem_Click);
             // 
             // saveImageAsToolStripMenuItem
             // 
@@ -335,6 +342,12 @@
             this.showGridlinesToolStripMenuItem.Text = "Show gridlines";
             this.showGridlinesToolStripMenuItem.Click += new System.EventHandler(this.showGridlinesToolStripMenuItem_Click);
             // 
+            // functionsToolStripMenuItem
+            // 
+            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
+            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.functionsToolStripMenuItem.Text = "Functions";
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -346,7 +359,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -359,7 +372,7 @@
             legend1.Name = "Legend1";
             this.specGraph.Legends.Add(legend1);
             this.specGraph.Location = new System.Drawing.Point(0, 0);
-            this.specGraph.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.specGraph.Margin = new System.Windows.Forms.Padding(0);
             this.specGraph.Name = "specGraph";
             this.specGraph.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
             series1.ChartArea = "ChartArea1";
@@ -442,6 +455,19 @@
             this.tableLayoutFooter.Size = new System.Drawing.Size(1634, 68);
             this.tableLayoutFooter.TabIndex = 3;
             // 
+            // selectedSpectrumName
+            // 
+            this.selectedSpectrumName.AutoSize = true;
+            this.selectedSpectrumName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.selectedSpectrumName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.selectedSpectrumName.ForeColor = System.Drawing.Color.Black;
+            this.selectedSpectrumName.Location = new System.Drawing.Point(184, 0);
+            this.selectedSpectrumName.Name = "selectedSpectrumName";
+            this.selectedSpectrumName.Size = new System.Drawing.Size(1347, 24);
+            this.selectedSpectrumName.TabIndex = 7;
+            this.selectedSpectrumName.Text = "No spectrum selected";
+            this.selectedSpectrumName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // intensityValueLabel
             // 
             this.intensityValueLabel.AutoSize = true;
@@ -467,32 +493,6 @@
             this.wavenumberValueLabel.TabIndex = 7;
             this.wavenumberValueLabel.Text = "0";
             this.wavenumberValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // selectedSpectrumName
-            // 
-            this.selectedSpectrumName.AutoSize = true;
-            this.selectedSpectrumName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.selectedSpectrumName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.selectedSpectrumName.ForeColor = System.Drawing.Color.Black;
-            this.selectedSpectrumName.Location = new System.Drawing.Point(184, 0);
-            this.selectedSpectrumName.Name = "selectedSpectrumName";
-            this.selectedSpectrumName.Size = new System.Drawing.Size(1347, 24);
-            this.selectedSpectrumName.TabIndex = 7;
-            this.selectedSpectrumName.Text = "No spectrum selected";
-            this.selectedSpectrumName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // functionsToolStripMenuItem
-            // 
-            this.functionsToolStripMenuItem.Name = "functionsToolStripMenuItem";
-            this.functionsToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.functionsToolStripMenuItem.Text = "Functions";
-            // 
-            // copyPngToClipboardToolStripMenuItem
-            // 
-            this.copyPngToClipboardToolStripMenuItem.Name = "copyPngToClipboardToolStripMenuItem";
-            this.copyPngToClipboardToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.copyPngToClipboardToolStripMenuItem.Text = "Copy PNG to clipboard...";
-            this.copyPngToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyPngToClipboardToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
