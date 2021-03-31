@@ -156,14 +156,13 @@ namespace spa_ftir_viewer
             return AbsToTrans();
         }
 
-        // TODO: something is wrong with the calculation here
         private List<double[]> TransToAbs()
         {
             List<double[]> translatedValues = new List<double[]>();
 
             foreach (double[] vals in this.values)
             {
-                // A = -log(%T)
+                // A = 2-log(%T)
                 double[] absValuePair = { vals[0], 2-Math.Log10(vals[1]) };
                 translatedValues.Add(absValuePair);
             }
@@ -180,7 +179,7 @@ namespace spa_ftir_viewer
 
             foreach (double[] vals in this.values)
             {
-                // %T = -10^(A)
+                // %T = -10^(A+2)
                 double[] transValuePair = { vals[0], Math.Pow(10, -vals[1]+2) };
                 translatedValues.Add(transValuePair);
             }

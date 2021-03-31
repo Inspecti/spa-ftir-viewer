@@ -231,7 +231,6 @@ namespace spa_ftir_viewer
         private void specGraph_MouseMove(object sender, MouseEventArgs e)
         {
             mouseXloc = e.Location.X;
-            //mouseYloc = e.Location.Y
             double mouseChartXLocation = 0;
 
             if (e.Location.X > 0 && e.Location.X < specGraph.Width)
@@ -308,7 +307,7 @@ namespace spa_ftir_viewer
 
             for (int i = 0; i < spectra.Count(); i++)
             {
-                if (Math.Abs(mouseYIntensity - (spectra.GetSpectrum(i).GetSingleIntensity(specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset)) < (spectra.intensityMaxAll - spectra.intensityMinAll)/100) // TODO: instead of 1 needs to be some scaling fractor of Y axis
+                if (Math.Abs(mouseYIntensity - (spectra.GetSpectrum(i).GetSingleIntensity(specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset)) < (spectra.intensityMaxAll - spectra.intensityMinAll)/100)
                 {
                     selectedSpectrumIndex = i;
                     selectedSpectrumName.Text = spectra.GetSpectrum(selectedSpectrumIndex).GetFilename();

@@ -37,8 +37,8 @@ namespace spa_ftir_viewer
 
             int intensityStartOffset = 1852;
             int maxWavenumOffset = 1600;
-            int totalNumValsOffset = 1588; // TODO: check if changing spectrometer resolution changes this value?
-            int totalNumVals = 7468;  
+            int totalNumValsOffset = 1588; 
+            int totalNumVals = 7468;  // Default value for resolution of 4 cm^-1, will be read from offset 1588 
             float maxWavenum = 0;
             float minWavenum = 0;
             float wavenumStep = 0;
