@@ -11,11 +11,10 @@ Compile solution with Visual Studio I guess.
 * Copying .emf file to clipboard for easy paste to Office apps
 * Read peak intensities based on single wn or range
 * Keyboard shortcuts for hiding, offsetting and resetting
-* Spectrum absorbance/transmittance value handling instead of just transmittance
 * Additional information extracting from .spa file
-* Spectrum peak picking and overlay
-* Zooming and scaling spectrum
-* Propose chemical identity based on wavenumber
+* Peak picking and overlay
+* Zoom and scale
+* Propose vibration based on wavenumber
 
 ## Stuff for the future:
 * Functions tab
