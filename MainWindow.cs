@@ -123,6 +123,7 @@ namespace spa_ftir_viewer
                 else
                 {
                     specGraph.Refresh();
+                    selectedSpectrumIndex = -1;
                     return 0;
                 }
             }
@@ -235,6 +236,7 @@ namespace spa_ftir_viewer
         // MOUSE FUNCTIONALITY
         private void specGraph_MouseMove(object sender, MouseEventArgs e)
         {
+
             mouseXloc = e.Location.X;
             double mouseChartXLocation = 0;
 
