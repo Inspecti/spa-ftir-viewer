@@ -28,6 +28,7 @@ namespace spa_ftir_viewer
         public Spectra spectra = new Spectra();
 
         ToolStripItemCollection specMenu = null;
+        Chart specChart = null;
 
         List<Color> colorPalette = new List<Color>();
 
@@ -271,7 +272,7 @@ namespace spa_ftir_viewer
                 {
                     if (selectedSpectrumIndex >= 0)
                     {
-                        spectra.GetSpectrum(selectedSpectrumIndex).tempYOffset = ((specGraph.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc)));
+                        spectra.GetSpectrum(selectedSpectrumIndex).tempYOffset = (specGraph.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc));
                     }
                     DrawSpectra();
                 }
@@ -310,11 +311,12 @@ namespace spa_ftir_viewer
 
         private void SelectClickedSpectrum(double mouseYIntensity)
         {
-            // specGrabDistance = (specGraph.ChartAreas[0].Height / specGraph.ChartAreas[0].AxisY.Maximum)
-
             for (int i = 0; i < spectra.Count(); i++)
             {
-                if (Math.Abs(mouseYIntensity - (spectra.GetSpectrum(i).GetSingleIntensity(specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset)) < (spectra.intensityMaxAll - spectra.intensityMinAll)/100)
+                double specGrabDistance = (spectra.intensityMaxAll - spectra.intensityMinAll)/100;
+                double cursorLocationSpecIntensityWithOffset = spectra.GetSpectrum(i).GetSingleIntensity(specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset;
+
+                if (Math.Abs(mouseYIntensity - cursorLocationSpecIntensityWithOffset) < specGrabDistance)
                 {
                     selectedSpectrumIndex = i;
                     selectedSpectrumName.Text = spectra.GetSpectrum(selectedSpectrumIndex).GetFilename();

@@ -122,6 +122,8 @@ namespace spa_ftir_viewer
             {
                 sp.ResetYOffset();
             }
+            this.intensityMinAll = Minimum();
+            this.intensityMaxAll = Maximum();
         }
 
         public void StackAllSpectra(double offset)
