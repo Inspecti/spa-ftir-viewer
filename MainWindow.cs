@@ -129,7 +129,12 @@ namespace spa_ftir_viewer
 
             if (filenames.Count > 10) filenames.RemoveRange(10, filenames.Count - 10);
 
-            spectra = new Spectra(filenames);
+            if (absorbanceMode)
+            {
+                spectra.ToTransmittance();
+                absorbanceMode = false;
+            }
+            spectra.LoadFromFilenames(filenames);
             spectra.ResetYOffsets();
 
             if (spectra.Count() > 10) spectra.spectrumList.RemoveRange(10, spectra.Count() - 10);

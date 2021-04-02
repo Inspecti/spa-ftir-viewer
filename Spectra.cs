@@ -23,22 +23,20 @@ namespace spa_ftir_viewer
 
         public Spectra(List<string> filenames)
         {
-            spectrumList = LoadFromFilenames(filenames);
+            spectrumList = new List<Spectrum>();
+            LoadFromFilenames(filenames);
+
             intensityMinAll = Minimum();
             intensityMaxAll = Maximum();
             areAbsorbance = false;
         }
 
-        public List<Spectrum> LoadFromFilenames(List<string> filenames)
+        public void LoadFromFilenames(List<string> filenames)
         {
-            List<Spectrum> spectra = new List<Spectrum>();
-
             foreach (string fn in filenames)
             {
-                spectra.Add(new Spectrum(fn));
+                spectrumList.Add(new Spectrum(fn));
             }
-            spectrumList = spectra;
-            return spectra;
         }
 
         public Spectrum GetSpectrum(int index)
@@ -48,6 +46,7 @@ namespace spa_ftir_viewer
 
         private double Minimum()
         {
+            if (spectrumList.Count == 0) return 0;
             double min = spectrumList[0].intensityMin;
             foreach (Spectrum sp in spectrumList)
             {
@@ -58,6 +57,7 @@ namespace spa_ftir_viewer
 
         private double Maximum()
         {
+            if (spectrumList.Count == 0) return 0;
             double max = spectrumList[0].intensityMax;
             foreach (Spectrum sp in spectrumList)
             {
