@@ -1,13 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -28,7 +22,7 @@ namespace spa_ftir_viewer
         public Spectra spectra = new Spectra();
 
         ToolStripItemCollection specMenu = null;
-        Chart specChart = null;
+        ChartArea specChartArea = null;
 
         List<Color> colorPalette = new List<Color>();
 
@@ -46,9 +40,10 @@ namespace spa_ftir_viewer
 
             InitializeComponent();
             specGraph.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            specChartArea = specGraph.ChartAreas[0];
 
             // X-axis
-            Axis xAx = specGraph.ChartAreas[0].AxisX;
+            Axis xAx = specChartArea.AxisX;
             
             xAx.MajorGrid.Enabled = true;
             xAx.MajorGrid.LineColor = majorGridCol;
@@ -73,7 +68,7 @@ namespace spa_ftir_viewer
             xAx.ScaleView.Zoomable = true;
 
             // Y-axis
-            Axis yAx = specGraph.ChartAreas[0].AxisY;
+            Axis yAx = specChartArea.AxisY;
 
             yAx.MajorGrid.Enabled = true;
             yAx.MajorGrid.LineColor = majorGridCol;
@@ -208,19 +203,19 @@ namespace spa_ftir_viewer
         {
             if (absorbanceMode)
             {
-                specGraph.ChartAreas[0].AxisY.Maximum = spectra.MaximumWithOffsets();
-                specGraph.ChartAreas[0].AxisY.Minimum = spectra.MinimumWithOffsets();
+                specChartArea.AxisY.Maximum = spectra.MaximumWithOffsets();
+                specChartArea.AxisY.Minimum = spectra.MinimumWithOffsets();
 
-                specGraph.ChartAreas[0].AxisY.Interval = 0.1;
-                specGraph.ChartAreas[0].AxisY.IntervalOffset = -(spectra.MinimumWithOffsets() % 0.1);
+                specChartArea.AxisY.Interval = 0.1;
+                specChartArea.AxisY.IntervalOffset = -(spectra.MinimumWithOffsets() % 0.1);
             }
             else 
             {
-                specGraph.ChartAreas[0].AxisY.Maximum = spectra.MaximumWithOffsets() + 2;
-                specGraph.ChartAreas[0].AxisY.Minimum = spectra.MinimumWithOffsets() - 2;
+                specChartArea.AxisY.Maximum = spectra.MaximumWithOffsets() + 2;
+                specChartArea.AxisY.Minimum = spectra.MinimumWithOffsets() - 2;
 
-                specGraph.ChartAreas[0].AxisY.Interval = 10;
-                specGraph.ChartAreas[0].AxisY.IntervalOffset = -(spectra.MinimumWithOffsets() - 2) % 10;
+                specChartArea.AxisY.Interval = 10;
+                specChartArea.AxisY.IntervalOffset = -(spectra.MinimumWithOffsets() - 2) % 10;
             }
 
         }
@@ -243,10 +238,10 @@ namespace spa_ftir_viewer
 
             if (e.Location.X > 0 && e.Location.X < specGraph.Width)
             {
-                mouseChartXLocation = specGraph.ChartAreas[0].AxisX.PixelPositionToValue(e.Location.X);
+                mouseChartXLocation = specChartArea.AxisX.PixelPositionToValue(e.Location.X);
             }
                 
-            if ( mouseChartXLocation > specGraph.ChartAreas[0].AxisX.Minimum && mouseChartXLocation < specGraph.ChartAreas[0].AxisX.Maximum)
+            if ( mouseChartXLocation > specChartArea.AxisX.Minimum && mouseChartXLocation < specChartArea.AxisX.Maximum)
             {
                 wavenumberValueLine.Text = ((int)mouseChartXLocation).ToString() + " cm ⁻¹";
                 wavenumberValueLine.Left = (int)mouseXloc + 5;
@@ -272,7 +267,7 @@ namespace spa_ftir_viewer
                 {
                     if (selectedSpectrumIndex >= 0)
                     {
-                        spectra.GetSpectrum(selectedSpectrumIndex).tempYOffset = (specGraph.ChartAreas[0].AxisY.PixelPositionToValue(e.Location.Y) - specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc));
+                        spectra.GetSpectrum(selectedSpectrumIndex).tempYOffset = (specChartArea.AxisY.PixelPositionToValue(e.Location.Y) - specChartArea.AxisY.PixelPositionToValue(mouseYloc));
                     }
                     DrawSpectra();
                 }
@@ -281,21 +276,21 @@ namespace spa_ftir_viewer
 
         private void specGraph_Click(object sender, EventArgs e)
         {
-            double mouseYIntensity = specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc);
+            double mouseYIntensity = specChartArea.AxisY.PixelPositionToValue(mouseYloc);
         }
 
         private void specGraph_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawLine(cursorLinePen, 
-                                (float)mouseXloc, (float)specGraph.ChartAreas[0].AxisY.ValueToPixelPosition(specGraph.ChartAreas[0].AxisY.Maximum), 
-                                (float)mouseXloc, (float)specGraph.ChartAreas[0].AxisY.ValueToPixelPosition(specGraph.ChartAreas[0].AxisY.Minimum));
+                                (float)mouseXloc, (float)specChartArea.AxisY.ValueToPixelPosition(specChartArea.AxisY.Maximum), 
+                                (float)mouseXloc, (float)specChartArea.AxisY.ValueToPixelPosition(specChartArea.AxisY.Minimum));
         }
 
         private void specGraph_MouseDown(object sender, MouseEventArgs e)
         {
             mouseXloc = e.Location.X;
             mouseYloc = e.Location.Y;
-            SelectClickedSpectrum(specGraph.ChartAreas[0].AxisY.PixelPositionToValue(mouseYloc));
+            SelectClickedSpectrum(specChartArea.AxisY.PixelPositionToValue(mouseYloc));
             dragging = true;
         }
 
@@ -314,7 +309,7 @@ namespace spa_ftir_viewer
             for (int i = 0; i < spectra.Count(); i++)
             {
                 double specGrabDistance = (spectra.intensityMaxAll - spectra.intensityMinAll)/100;
-                double cursorLocationSpecIntensityWithOffset = spectra.GetSpectrum(i).GetSingleIntensity(specGraph.ChartAreas[0].AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset;
+                double cursorLocationSpecIntensityWithOffset = spectra.GetSpectrum(i).GetSingleIntensity(specChartArea.AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset;
 
                 if (Math.Abs(mouseYIntensity - cursorLocationSpecIntensityWithOffset) < specGrabDistance)
                 {
@@ -496,7 +491,7 @@ namespace spa_ftir_viewer
 
         private void stackAllSpectraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            double offset = (specGraph.ChartAreas[0].AxisY.Maximum - specGraph.ChartAreas[0].AxisY.Minimum) / 30;
+            double offset = (specChartArea.AxisY.Maximum - specChartArea.AxisY.Minimum) / 30;
             spectra.StackAllSpectra(offset);
             DrawSpectra();
             SetGraphYScale();
@@ -564,11 +559,11 @@ namespace spa_ftir_viewer
 
             it.Checked = !it.Checked;
 
-            specGraph.ChartAreas[0].AxisX.MajorGrid.Enabled = it.Checked;
-            specGraph.ChartAreas[0].AxisX.MinorGrid.Enabled = it.Checked;
+            specChartArea.AxisX.MajorGrid.Enabled = it.Checked;
+            specChartArea.AxisX.MinorGrid.Enabled = it.Checked;
 
-            specGraph.ChartAreas[0].AxisY.MajorGrid.Enabled = it.Checked;
-            specGraph.ChartAreas[0].AxisY.MinorGrid.Enabled = it.Checked;
+            specChartArea.AxisY.MajorGrid.Enabled = it.Checked;
+            specChartArea.AxisY.MinorGrid.Enabled = it.Checked;
         }
 
         // HELP TOOLSTRIP MENU
