@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -347,8 +348,21 @@ namespace spa_ftir_viewer
             {
                 if (chartImgFormat == ChartImageFormat.Emf)
                 {
-                    MessageBox.Show("Not yet implemented", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return false;
+                    specGraph.SaveImage(ms, ChartImageFormat.EmfPlus);
+
+                    // This doesn't work yet
+
+                    /* IntPtr ptr = this.Handle;
+                    Metafile mf = new Metafile(ms, ptr); // System.Runtime.InteropServices.ExternalException: 'A generic error occurred in GDI+.'
+
+                    const int CF_ENHMETAFILE = 14;
+
+                    if (ClipboardFunctions.OpenClipboard(this.Handle))
+                    {
+                        ClipboardFunctions.SetClipboardData(CF_ENHMETAFILE, ptr);
+                        ClipboardFunctions.CloseClipboard();
+                        return true;
+                    }*/
                 }
                 specGraph.SaveImage(ms, chartImgFormat);
                 Clipboard.SetImage(System.Drawing.Image.FromStream(ms));
