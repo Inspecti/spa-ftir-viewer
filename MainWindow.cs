@@ -344,35 +344,16 @@ namespace spa_ftir_viewer
 
         private bool copyToClipboard(ChartImageFormat chartImgFormat)
         {
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
                 if (chartImgFormat == ChartImageFormat.Emf)
                 {
-                    if (ClipboardFunctions.OpenClipboard(this.Handle))
-                    {
-                        int CF_ENHMETAFILE = 14;
+                    specGraph.SaveImage(stream, ChartImageFormat.EmfPlus);
+                    return ClipboardFunctions.CopyEmfToClipboard(this.Handle, stream);
 
-                        string tempFile = Path.GetTempFileName();
-                        specGraph.SaveImage(tempFile, ChartImageFormat.EmfPlus);
-
-                        //specGraph.SaveImage(ms, ChartImageFormat.EmfPlus);
-                        //Metafile file = new Metafile(ms, this.Handle, EmfType.EmfPlusOnly);
-                        //IntPtr ptr = file.GetHenhmetafile();
-                        // TODO: replace with memorystream
-                        
-                        IntPtr ptr = ClipboardFunctions.GetEnhMetaFileW(tempFile);
-                        ClipboardFunctions.EmptyClipboard();
-                        ClipboardFunctions.SetClipboardData(CF_ENHMETAFILE, ptr);
-                        ClipboardFunctions.CloseClipboard();
-                        ClipboardFunctions.DeleteEnhMetaFile(ptr);
-
-                        File.Delete(tempFile);
-                        return true;
-                    }
-                    return false;
                 }
-                specGraph.SaveImage(ms, chartImgFormat);
-                Clipboard.SetImage(System.Drawing.Image.FromStream(ms));
+                specGraph.SaveImage(stream, chartImgFormat);
+                Clipboard.SetImage(Image.FromStream(stream));
                 return true;
             }
         }

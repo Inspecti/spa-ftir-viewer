@@ -20,12 +20,5 @@ namespace spa_ftir_viewer
 
         [DllImport("user32.dll", EntryPoint = "GetClipboardData", SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr GetClipboardData(int uFormat);
-
-        // EMF file handling
-        [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, EntryPoint = "GetEnhMetaFileW", ExactSpelling = true)]
-        public extern static IntPtr GetEnhMetaFileW(string path);
-
-        [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, EntryPoint = "DeleteEnhMetaFile", ExactSpelling = true)]
-        public extern static int DeleteEnhMetaFile(IntPtr handle);
     }
 }
