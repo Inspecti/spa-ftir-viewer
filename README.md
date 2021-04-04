@@ -8,7 +8,6 @@ Set up file association to open up .spa files with the program, or just run the 
 Compile solution with Visual Studio I guess.
 
 ## TODO:
-* Copying .emf file to clipboard for easy paste to Office apps
 * Read peak intensities based on single wn or range
 * Keyboard shortcuts for hiding, offsetting and resetting
 * Additional information extracting from .spa file

@@ -5,6 +5,7 @@ namespace spa_ftir_viewer
 {
     class ClipboardFunctions
     {
+        // Clipboard
         [DllImport("user32.dll", EntryPoint = "OpenClipboard", SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         public static extern bool OpenClipboard(IntPtr hWnd);
 
@@ -20,11 +21,11 @@ namespace spa_ftir_viewer
         [DllImport("user32.dll", EntryPoint = "GetClipboardData", SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
         public static extern IntPtr GetClipboardData(int uFormat);
 
-        [DllImport("user32.dll", EntryPoint = "IsClipboardFormatAvailable", SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-        public static extern short IsClipboardFormatAvailable(int uFormat);
+        // EMF file handling
+        [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, EntryPoint = "GetEnhMetaFileW", ExactSpelling = true)]
+        public extern static IntPtr GetEnhMetaFileW(string path);
 
-        // Possibly need to use wingdi https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-getenhmetafilew
-        // [DllImport("gdi32.dll", EntryPoint = "GetEnhMetaFileW", SetLastError = true, ExactSpelling = true, CallingConvention = CallingConvention.StdCall)]
-        // public static extern short GetEnhMetaFileW();
+        [DllImport("Gdi32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Unicode, EntryPoint = "DeleteEnhMetaFile", ExactSpelling = true)]
+        public extern static int DeleteEnhMetaFile(IntPtr handle);
     }
 }
