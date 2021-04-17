@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClipboardFunctions.cs" />
+    <Compile Include="HandleMetafiles.cs" />
     <Compile Include="Spectra.cs" />
     <Compile Include="Spectrum.cs" />
     <Compile Include="SpaFile.cs" />

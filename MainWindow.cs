@@ -309,7 +309,7 @@ namespace spa_ftir_viewer
         {
             for (int i = 0; i < spectra.Count(); i++)
             {
-                double specGrabDistance = (spectra.intensityMaxAll - spectra.intensityMinAll)/100;
+                double specGrabDistance = (spectra.intensityMaxAll - spectra.intensityMinAll)/60;
                 double cursorLocationSpecIntensityWithOffset = spectra.GetSpectrum(i).GetSingleIntensity(specChartArea.AxisX.PixelPositionToValue(mouseXloc)) + spectra.GetSpectrum(i).yOffset;
 
                 if (Math.Abs(mouseYIntensity - cursorLocationSpecIntensityWithOffset) < specGrabDistance)
@@ -349,8 +349,7 @@ namespace spa_ftir_viewer
                 if (chartImgFormat == ChartImageFormat.Emf)
                 {
                     specGraph.SaveImage(stream, ChartImageFormat.EmfPlus);
-                    return ClipboardFunctions.CopyEmfToClipboard(this.Handle, stream);
-
+                    return HandleMetafiles.CopyEmfToClipboard(this.Handle, stream);
                 }
                 specGraph.SaveImage(stream, chartImgFormat);
                 Clipboard.SetImage(Image.FromStream(stream));
